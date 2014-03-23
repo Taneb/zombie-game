@@ -47,7 +47,7 @@ drawZombie zombieSprite t Zombie {_position = p} =
   let dvec = fmap fromIntegral $ p ^. dest - p ^. start
       angle = view _y dvec `atan2` view _x dvec
       pos = p ^.(start.to (fmap fromIntegral)) + (fromIntegral t / 16) *^ dvec
-  in rotateR angle $ translate (12*pos) $ bitmap zombieSprite
+  in rotateR angle $ translate (12*(pos+0.5)) $ bitmap zombieSprite
 
 drawGame :: (Monad p, Picture2D p) => Bitmap -> GameState -> p ()
 drawGame zombieSprite gameState = do
