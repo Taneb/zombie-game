@@ -40,7 +40,7 @@ makeLenses ''GameState
 drawStaticEntity :: Picture2D p => Coord -> StaticEntity -> p ()
 drawStaticEntity coord Wall =
   color green $ polygon $ map ((*) 12 . fmap fromIntegral)
-  [coord, coord & _x +~ 1, coord & _y +~ 1, coord & traverse +~ 1]
+  [coord, coord & _x +~ 1, coord & traverse +~ 1, coord & _y +~ 1]
 
 drawZombie :: Picture2D p => Bitmap -> Int -> Zombie -> p ()
 drawZombie zombieSprite t Zombie {_position = p} =
