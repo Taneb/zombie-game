@@ -19,6 +19,6 @@ executable zombie-game
   -- main-is:             
   -- other-modules:       
   other-extensions:    TemplateHaskell
-  build-depends:       base >=4.6 && <4.7, lens >=4.0 && <4.1, containers >=0.5 && <0.6, free-game >=1.0 && <1.1
+  build-depends:       base >=4.6 && <4.7, lens >=4.0 && <4.1, containers >=0.5 && <0.6, free-game >=1.0 && <1.1, mtl
   hs-source-dirs:      src
   default-language:    Haskell2010
