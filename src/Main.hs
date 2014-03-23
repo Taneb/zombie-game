@@ -39,7 +39,7 @@ makeLenses ''GameState
 
 drawStaticEntity :: Picture2D p => Coord -> StaticEntity -> p ()
 drawStaticEntity coord Wall =
-  color green $ polygon $ map ((*) 6 . fmap fromIntegral)
+  color green $ polygon $ map ((*) 12 . fmap fromIntegral)
   [coord, coord & _x +~ 1, coord & _y +~ 1, coord & traverse +~ 1]
 
 drawZombie :: Picture2D p => Bitmap -> Int -> Zombie -> p ()
@@ -47,7 +47,7 @@ drawZombie zombieSprite t Zombie {_position = p} =
   let dvec = fmap fromIntegral $ p ^. dest - p ^. start
       angle = view _y dvec `atan2` view _x dvec
       pos = p ^.(start.to (fmap fromIntegral)) + (fromIntegral t / 16) *^ dvec
-  in rotateR angle $ translate pos $ bitmap zombieSprite
+  in rotateR angle $ translate (12*pos) $ bitmap zombieSprite
 
 drawGame :: (Monad p, Picture2D p) => Bitmap -> GameState -> p ()
 drawGame zombieSprite gameState = do
@@ -60,8 +60,8 @@ loadMap path = do
   things <- path ^@!! act readFile . to lines . ifolded <.> ifolded
   return $ M.fromList $ do
     (c,t) <- things
-    let v = uncurry V2 c
-        Just e = convert v t
+    let v = uncurry (flip V2) c
+    Just e <- [convert v t]
     return (v, e)
   where
     convert _ '#' = Just $ Left Wall
@@ -70,4 +70,9 @@ loadMap path = do
     convert _ _ = Nothing
 
 main :: IO ()
-main = return ()
+main = do
+  m <- loadMap "data/map1.map"
+  z <- readBitmap "data/zombie.png"
+  _ <- runGame Windowed (BoundingBox 0 0 600 600) $ foreverFrame $ drawGame z $
+    GameState {_gameMap = m, _target = undefined, _ticker = 0}
+  return ()
